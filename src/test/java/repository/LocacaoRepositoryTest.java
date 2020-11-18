@@ -54,6 +54,7 @@ public class LocacaoRepositoryTest {
         clienteRepository.save(ClienteBuilder.umCliente().constroi());
         Cliente cliente = clienteRepository.findByCpf(ClienteBuilder.umCliente().constroi().getCpf()).get();
         repository.save(LocacaoBuilder.umaLocacao().comCliente(cliente).comImovel(imovel).constroi());
+        System.out.println(clienteRepository.findAll().size()+"Birosca");
         repository.findLocacao(LocacaoBuilder.umaLocacao().comCliente(cliente).constroi().getCliente(), LocacaoBuilder.umaLocacao().comImovel(imovel).constroi().getImovel());
     }
 }

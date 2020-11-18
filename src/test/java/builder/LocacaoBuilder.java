@@ -20,8 +20,8 @@ public class LocacaoBuilder {
 
         builder.locacao = new Locacao();
         builder.locacao.setCliente(ClienteBuilder.umCliente().constroi());
-        builder.locacao.setImovel(ImovelBuilder.umImovel().comLocacao().constroi());
-        builder.locacao.setAtivo(true);
+        builder.locacao.setImovel(ImovelBuilder.umImovel().constroi());
+        builder.locacao.setAtivo(false);
         builder.locacao.setValorAluguel(800.0);
         builder.locacao.setPorcentualMulta(0.4);
         builder.locacao.setDataInicio(LocalDate.now());

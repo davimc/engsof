@@ -19,7 +19,7 @@ public class LocacaoRepository extends DAO<Locacao> {
         try {
             return
                     (Locacao) getManager()
-                            .createQuery("from Locacao where cliente_id=:cliente and imovel_id =:imovel")
+                            .createQuery("from Locacao where  imovel_id =:imovel and cliente_id=:cliente")
                             .setParameter("cliente", cliente.getId())
                             .setParameter("imovel", imovel.getId())
                             .getSingleResult();

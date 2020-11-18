@@ -18,10 +18,10 @@ public class AluguelRepository extends DAO<Aluguel> {
         return getManager().createQuery("from Aluguel where locacao_id=:locacaoId").setParameter("locacaoId",locacao.getId()).getResultList();
     }
     public Aluguel findByDataVencimento(Locacao locacao, LocalDate dataVencimento){
-        return (Aluguel)
-                getManager().createQuery("from Aluguel where locacao_id=:locacaoI and dataVencimento=:data")
+                return (Aluguel)getManager().createQuery("from Aluguel where locacao_id=:locacaoId and dataVencimento=:data")
                         .setParameter("locacaoId",locacao.getId())
                         .setParameter("data", dataVencimento)
                         .getSingleResult();
+
     }
 }

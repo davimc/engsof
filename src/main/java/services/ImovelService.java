@@ -22,27 +22,44 @@ public class ImovelService {
         Endereco endereco= null;
         try{
             endereco = enderecoRepository.findEndereco(imovel.getEndereco().getRua(),imovel.getEndereco().getNumero(),imovel.getEndereco().getBairro(),imovel.getEndereco().getCep()).get();
-            System.out.println("foifoifoif");
-            imovel = repository.findByEndereco(endereco.getId()).equals(imovel)?imovel:repository.findByEndereco(endereco.getId());
-            System.out.println("foifoifoif");
+
+            imovel = repository.findByEndereco(endereco.getId()).equals(imovel.getEndereco().getId())?imovel:repository.findByEndereco(endereco.getId());
+            return imovel;
         }catch(NoResultException e){
             if(endereco ==null) {
-            System.out.println("okokok");
                 enderecoRepository.save(imovel.getEndereco());
                 endereco = enderecoRepository.findEndereco(imovel.getEndereco().getRua(), imovel.getEndereco().getNumero(), imovel.getEndereco().getBairro(), imovel.getEndereco().getCep()).get();
             }
         }
             imovel.setEndereco(endereco);
             repository.save(imovel);
+            imovel = repository.findByEndereco(endereco.getId());
 
             return imovel;
     }
-    public List<Imovel> encontraImovelPorBairro(String bairro){
+    public Imovel locaImovel(Imovel imovel){
+        if(imovel.isAtivo())
+            throw new IllegalStateException("Imovel já está em uso");
+        imovel.setAtivo(true);
+        repository.save(imovel);
+        return imovel;
+    }
+    public List<Imovel> encontraImoveisDisponivelPorBairro(String bairro){
         List<Imovel> imoveisBairro = new ArrayList<>();
-        enderecoRepository.findEnderecoByBairro("Centro").forEach(endereco -> {
-            imoveisBairro.add(repository.findByEndereco(endereco.getId()));
+        repository.findByAtivo(false).forEach(imovel -> {
+
+            if(imovel.getEndereco().getBairro()=="Centro")
+                imoveisBairro.add(imovel);
         });
 
         return imoveisBairro;
+    }
+    public List<Imovel> encontraImoveisDisponiveisPorPreco(double precoMax){
+        List<Imovel> imoveisPreco = new ArrayList<>();
+        repository.findByAtivo(false).forEach(imovel->{
+            if(imovel.getAluguelSugerido()<=precoMax)
+                imoveisPreco.add(imovel);
+        });
+        return imoveisPreco;
     }
 }

@@ -10,11 +10,12 @@ import java.util.Objects;
 @Table(name="aluguel")
 public class Aluguel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="aluguel_id")
+    @JoinColumn(name="locacao_id")
     private Locacao locacao;
+    @Column(nullable = false)
     private LocalDate dataVencimento;
     private LocalDate dataPagamento;
     private double valorPago;
