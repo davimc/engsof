@@ -95,4 +95,8 @@ public class Aluguel {
     public int hashCode() {
         return Objects.hash(locacao, dataVencimento, dataPagamento, valorPago);
     }
+
+    public boolean emAtraso(){
+        return  getDataVencimento().isBefore(LocalDate.now());
+    }
 }

@@ -23,9 +23,18 @@ public class AluguelBuilder {
 
         return builder;
     }
-    public AluguelBuilder comPagamento(LocalDate data){
+    public AluguelBuilder comLocacao(Locacao locacao){
+        aluguel.setLocacao(locacao);
+        return this;
+    }
+    public AluguelBuilder comUmMesAtraso(){
+        aluguel.setDataVencimento(LocalDate.now().minusMonths(1));
+
+        return this;
+    }
+    public AluguelBuilder comPagamento(){
         aluguel.setValorPago(LocacaoBuilder.umaLocacao().constroi().getValorAluguel());
-        aluguel.setDataPagamento(data);
+        aluguel.setDataPagamento(LocalDate.now());
 
         return this;
     }

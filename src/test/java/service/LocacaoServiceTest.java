@@ -3,10 +3,9 @@ package service;
 import builder.ClienteBuilder;
 import builder.ImovelBuilder;
 import builder.LocacaoBuilder;
-import models.Aluguel;
-import models.Imovel;
-import models.Locacao;
+import models.*;
 import org.junit.jupiter.api.*;
+import repositories.LocacaoRepository;
 import services.ImovelService;
 import services.LocacaoService;
 
@@ -43,8 +42,9 @@ public class LocacaoServiceTest {
     @Test
     public void testaCriarLocacao(){
         Locacao locacao = service.alocaImovel(LocacaoBuilder.umaLocacao().constroi());
-
-        Assertions.assertEquals(1L, locacao.getId());
+        LocacaoRepository repository = new LocacaoRepository(manager);
+        System.out.println(repository.findAll().size()+"aqui");
+        Assertions.asse rtEquals(1L, locacao.getId());
     }
     @Test
     public void testaCadastrarAluguel(){
@@ -95,4 +95,5 @@ public class LocacaoServiceTest {
 
         Assertions.assertEquals(2,service.listaAlugueisPagosEmAtraso(locacao).size());
     }
+
 }

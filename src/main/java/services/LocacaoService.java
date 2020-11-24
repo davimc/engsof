@@ -5,6 +5,7 @@ import models.Cliente;
 import models.Imovel;
 import models.Locacao;
 import repositories.AluguelRepository;
+import repositories.EmailService;
 import repositories.LocacaoRepository;
 
 import javax.persistence.EntityManager;
@@ -19,11 +20,15 @@ public class LocacaoService {
     private ImovelService imovelService;
     private AluguelService aluguelService;
 
+    private EmailService emailService;
+
+
     public LocacaoService(EntityManager manager){
-        locacaoRepository = new LocacaoRepository(manager);
+        //locacaoRepository = new LocacaoRepository(manager);
         clienteService = new ClienteService(manager);
         imovelService = new ImovelService(manager);
         aluguelService = new AluguelService(manager);
+
     }
 
     public Locacao alocaImovel(Locacao locacao){
@@ -71,7 +76,19 @@ public class LocacaoService {
     }
     public double calculaAluguel(Locacao locacao, LocalDate dataVencimento, LocalDate dataPagamento){
         int diasAtraso = aluguelService.calculaDiasAtraso(locacao,dataVencimento,dataPagamento);
-        return diasAtraso>0?locacao.getValorAluguel()+((locacao.getValorAluguel()*locacao.getPorcentualMulta())*diasAtraso):locacao.getValorAluguel();
+        return diasAtraso>0?
+                locacao.getValorAluguel()+((locacao.getValorAluguel()*locacao.getPorcentualMulta())*diasAtraso):locacao.getValorAluguel();
+    }
+    public void informaLocacoesAtrasadas(){
+        List<Locacao> locacoes = locacaoRepository.findAll();
+        locacoes.forEach(locacao->{
+            for (Aluguel aluguel : locacao.getAlugueis()) {
+                if(aluguel.emAtraso()){
+                    emailService.notificaAtraso(locacao.getCliente());
+                    break;
+                }
+            }
+        });
     }
     public List<Aluguel> listaAlugueisPagosEmAtraso(Locacao locacao){
         List<Aluguel> alugueisPagosAtrasado = new ArrayList<>();
